@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # NdeonStore
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.10.
@@ -57,3 +58,7 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+=======
+# Ndeon-store-Angular
+Version angular/typescript de la pagina web
+>>>>>>> 22e6ebce0c8ac1f321f06aee0a5edf9a5015af5f
