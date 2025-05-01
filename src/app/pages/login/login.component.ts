@@ -1,33 +1,29 @@
 import { Component } from '@angular/core';
+import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'] // o scss si elegiste esa opción
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
   username: string = '';
   password: string = '';
   errorMessage: string = '';
 
-  constructor(private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
-  onSubmit(): void {
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const user = users.find((u: any) => u.username === this.username && u.password === this.password);
-
+  login(): void {
+    const user = this.authService.login(this.username, this.password);
     if (user) {
-      localStorage.setItem('loggedUser', JSON.stringify(user));
       if (user.role === 'admin') {
         this.router.navigate(['/admin']);
       } else {
-        this.router.navigate(['/home']);
+        this.router.navigate(['/product']);
       }
     } else {
       this.errorMessage = 'Usuario o contraseña incorrectos.';
     }
   }
 }
-
-

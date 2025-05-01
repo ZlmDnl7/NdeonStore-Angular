@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap');
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background-image: url("../assets/img/background.jpg"); /* Fondo general para todas las páginas */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  margin: 0;
+  padding: 0;
+  color: white;
+  min-height: 100vh;
+}
+
+/* Fondo específico para las páginas de login y register */
+:host-context(app-login) body,
+:host-context(app-register) body {
+  background-image: url("../assets/img/otra5.jpg");
+}

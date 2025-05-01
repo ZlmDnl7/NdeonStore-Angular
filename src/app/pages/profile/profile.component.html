@@ -1,1 +1,23 @@
-<p>profile works!</p>
+<app-navbar></app-navbar>
+
+<div class="container">
+  <h2>Perfil</h2>
+  <p><strong>Nombre:</strong> <span>{{ user?.fullname }}</span></p>
+  <p><strong>Usuario:</strong> <span>{{ user?.username }}</span></p>
+  <p><strong>Contraseña:</strong> <span>{{ passwordDisplay || '******' }}</span></p>
+
+  <label for="verifyPassword">Introduce tu contraseña para ver la actual:</label>
+  <input type="password" id="verifyPassword" [(ngModel)]="verifyPassword" placeholder="Contraseña">
+  <button (click)="showPassword()">Mostrar Contraseña</button>
+
+  <h3>Editar Perfil</h3>
+  <form (ngSubmit)="updateProfile()">
+    <input type="text" id="newUsername" [(ngModel)]="newUsername" name="newUsername" placeholder="Nuevo usuario">
+    <input type="password" id="currentPassword" [(ngModel)]="currentPassword" name="currentPassword" placeholder="Contraseña actual" required>
+    <input type="password" id="newPassword" [(ngModel)]="newPassword" name="newPassword" placeholder="Nueva contraseña">
+    <button type="submit">Guardar Cambios</button>
+  </form>
+
+  <button id="logout" (click)="logout()">Cerrar Sesión</button>
+  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+</div>

@@ -1,1 +1,33 @@
-<p>cart works!</p>
+<app-navbar></app-navbar>
+
+<div class="container">
+  <h2>Carrito de Compras</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Cantidad</th>
+        <th>Precio</th>
+        <th>Total-cantidad</th>
+        <th>Restar/Eliminar</th>
+      </tr>
+    </thead>
+    <tbody id="cart-items">
+      <tr *ngIf="cartItems.length === 0">
+        <td colspan="5">El carrito está vacío.</td>
+      </tr>
+      <tr *ngFor="let item of cartItems; let i = index">
+        <td>{{ item.product.nombre }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>${{ item.product.precio.toFixed(2) }}</td>
+        <td>${{ (item.product.precio * item.quantity).toFixed(2) }}</td>
+        <td>
+          <button (click)="decreaseQuantity(i)">➖</button>
+          <button (click)="removeItem(i)">❌</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h3>Total a Pagar: $<span>{{ total.toFixed(2) }}</span></h3>
+  <button id="pagarBtn" (click)="checkout()">Pagar</button>
+</div>

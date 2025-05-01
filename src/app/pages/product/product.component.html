@@ -1,1 +1,41 @@
-<p>product works!</p>
+<app-navbar></app-navbar>
+
+<div class="content">
+  <h2>Bienvenidos a ndeon store</h2>
+  <section id="descripcion">
+    <h2>Descripción</h2>
+    <p>Somos una tienda especializada en la venta de tarjetas gráficas de NVIDIA y AMD, ofreciendo productos de alto rendimiento para gamers y creadores de contenido.</p>
+  </section>
+
+  <section id="quienes-somos">
+    <h2>¿Quiénes somos?</h2>
+    <p>Somos un equipo apasionado por la tecnología y el gaming, brindando las mejores soluciones en hardware gráfico.</p>
+  </section>
+
+  <section id="productos">
+    <h2>Nuestros Productos</h2>
+    <div class="productos-container">
+      <div class="producto" *ngFor="let product of products" (click)="openModal(product)">
+        <img [src]="product.imagen" [alt]="product.nombre">
+        <p>{{ product.nombre }}</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Modal para detalles del producto -->
+<div id="modal" class="modal" *ngIf="showModal">
+  <div class="modal-content">
+    <span id="cerrarModal" class="close" (click)="closeModal()">×</span>
+    <img id="modalImagen" [src]="selectedProduct?.imagen" [alt]="selectedProduct?.nombre">
+    <div class="modal-info">
+      <h2 id="modalNombre">{{ selectedProduct?.nombre }}</h2>
+      <p id="modalDescripcion">{{ selectedProduct?.descripcion }}</p>
+      <p><strong>Precio:</strong> <span id="modalPrecio">{{ selectedProduct?.precio }}</span></p>
+      <p><strong>Categoría:</strong> <span id="modalCategoria">{{ selectedProduct?.categoria }}</span></p>
+      <label for="modalCantidad">Cantidad:</label>
+      <input type="number" id="modalCantidad" [(ngModel)]="quantity" min="1">
+      <button id="agregarCarritoBtn" (click)="addToCart()">Agregar al Carrito</button>
+    </div>
+  </div>
+</div>

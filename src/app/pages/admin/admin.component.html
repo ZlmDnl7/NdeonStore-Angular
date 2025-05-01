@@ -1,1 +1,59 @@
-<p>admin works!</p>
+<div class="container">
+  <h2>Panel de Administrador</h2>
+  <button (click)="logout()">Cerrar Sesión</button>
+
+  <h3>Lista de Productos</h3>
+  <table id="productTable">
+    <thead>
+      <tr>
+        <th>Imagen</th>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Precio</th>
+        <th>Categoría</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of products; let i = index">
+        <td><img [src]="product.imagen" width="50" alt="{{ product.nombre }}"></td>
+        <td>{{ product.nombre }}</td>
+        <td>{{ product.descripcion }}</td>
+        <td>{{ product.precio }}</td>
+        <td>{{ product.categoria }}</td>
+        <td><button class="delete-btn" (click)="deleteProduct(i)">Eliminar</button></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Añadir Producto</h3>
+  <form (ngSubmit)="addProduct()" #addProductForm="ngForm">
+    <input type="text" id="productName" [(ngModel)]="newProduct.nombre" name="nombre" placeholder="Nombre" required>
+    <input type="text" id="productDescription" [(ngModel)]="newProduct.descripcion" name="descripcion" placeholder="Descripción" required>
+    <input type="number" id="productPrice" [(ngModel)]="newProduct.precio" name="precio" placeholder="Precio" required>
+    <select id="productCategory" [(ngModel)]="newProduct.categoria" name="categoria" required>
+      <option value="AMD">AMD</option>
+      <option value="NVIDIA">NVIDIA</option>
+    </select>
+    <input type="text" id="productImage" [(ngModel)]="newProduct.imagen" name="imagen" placeholder="URL de la Imagen" required>
+    <button type="submit">Añadir Producto</button>
+  </form>
+
+  <h3>Lista de Usuarios</h3>
+  <table id="userTable">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Usuario</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users; let i = index">
+        <td>{{ user.fullname }}</td>
+        <td>{{ user.username }}</td>
+        <td><button (click)="deleteUser(i)">Eliminar</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
