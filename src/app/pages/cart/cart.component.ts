@@ -1,12 +1,17 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { CartService } from '../../core/services/cart.service';
 import { Router } from '@angular/router';
 import { CartItem } from '../../core/models/cart-item.model';
+import { NavbarComponent } from '../../shared/navbar/navbar.component';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
-  styleUrls: ['./cart.component.css']
+  styleUrls: ['./cart.component.css'],
+  standalone: true,
+  imports: [CommonModule, RouterModule, NavbarComponent]
 })
 export class CartComponent implements OnInit {
   cartItems: CartItem[] = [];

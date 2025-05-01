@@ -4,11 +4,15 @@ import { RouterModule } from '@angular/router';
 import { NavbarComponent } from './navbar/navbar.component';
 
 @NgModule({
-  declarations: [NavbarComponent],
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    NavbarComponent
   ],
-  exports: [NavbarComponent]  // Exportamos NavbarComponent para que otros módulos lo usen
+  exports: [
+    NavbarComponent,
+    CommonModule,
+    RouterModule
+  ]
 })
-export class SharedModule {}
+export class SharedModule { }

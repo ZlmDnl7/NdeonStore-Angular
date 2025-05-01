@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { ProductService } from '../../core/services/product.service';
 import { Router } from '@angular/router';
@@ -8,7 +11,9 @@ import { User } from '../../core/models/user.model';
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.css']
+  styleUrls: ['./admin.component.css'],
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterModule]
 })
 export class AdminComponent implements OnInit {
   products: Product[] = [];
