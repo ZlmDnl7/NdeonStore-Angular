@@ -2,14 +2,25 @@ import { Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'product', pathMatch: 'full' },
+  {
+    path: '',
+    redirectTo: 'home',  // Cambiado de 'login' a 'home'
+    pathMatch: 'full'
+  },
   {
     path: 'login',
-    loadChildren: () => import('./pages/login/login.module').then(m => m.LoginModule)
+    loadChildren: () => import('./pages/login/login.module').then(m => m.LoginModule),
+    canActivate: [AuthGuard],  // Agregamos AuthGuard aquí
+    data: { requiresAuth: false }  // Flag especial para login
   },
   {
     path: 'register',
     loadChildren: () => import('./pages/register/register.module').then(m => m.RegisterModule)
+  },
+  {
+    path: 'home',
+    loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent),
+    canActivate: [AuthGuard]
   },
   {
     path: 'cart',
@@ -18,7 +29,8 @@ export const routes: Routes = [
   },
   {
     path: 'product',
-    loadChildren: () => import('./pages/product/product.module').then(m => m.ProductModule)
+    loadChildren: () => import('./pages/product/product.module').then(m => m.ProductModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'profile',
@@ -33,8 +45,8 @@ export const routes: Routes = [
   },
   {
     path: 'find-us',
-    loadChildren: () => import('./pages/find-us/find-us.module').then(m => m.FindUsModule)
+    loadChildren: () => import('./pages/find-us/find-us.module').then(m => m.FindUsModule),
+    canActivate: [AuthGuard]
   },
-  { path: '**', redirectTo: 'product' }
+  { path: '**', redirectTo: 'home' }  // Cambiado de 'login' a 'home'
 ];
-
