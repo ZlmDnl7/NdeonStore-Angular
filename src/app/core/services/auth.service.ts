@@ -10,11 +10,13 @@ export class AuthService {
   private currentUser: User | null = null;
 
   constructor(private router: Router) {
+    // Cargar usuarios guardados
     const savedUsers = localStorage.getItem('users');
     if (savedUsers) {
       this.users = JSON.parse(savedUsers);
     }
 
+    // Cargar usuario actual de sessionStorage
     const loggedUser = sessionStorage.getItem('currentUser');
     if (loggedUser) {
       this.currentUser = JSON.parse(loggedUser);
@@ -84,14 +86,37 @@ export class AuthService {
   }
 
   getCurrentUser(): User | null {
+    // Si no hay usuario actual pero existe en sessionStorage, cargarlo
+    if (!this.currentUser) {
+      const loggedUser = sessionStorage.getItem('currentUser');
+      if (loggedUser) {
+        this.currentUser = JSON.parse(loggedUser);
+      }
+    }
     return this.currentUser;
   }
 
   isLoggedIn(): boolean {
-    return !!this.currentUser;
+    // Verificar tanto la variable como sessionStorage
+    if (!this.currentUser) {
+      const loggedUser = sessionStorage.getItem('currentUser');
+      if (loggedUser) {
+        this.currentUser = JSON.parse(loggedUser);
+        return true;
+      }
+      return false;
+    }
+    return true;
   }
 
   isAdmin(): boolean {
+    // Verificar tanto la variable como sessionStorage
+    if (!this.currentUser) {
+      const loggedUser = sessionStorage.getItem('currentUser');
+      if (loggedUser) {
+        this.currentUser = JSON.parse(loggedUser);
+      }
+    }
     return this.currentUser?.role === 'admin';
   }
 
