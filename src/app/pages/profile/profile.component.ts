@@ -16,8 +16,6 @@ import { NavbarComponent } from '../../shared/navbar/navbar.component';
 })
 export class ProfileComponent implements OnInit {
   user: User | null = null;
-  verifyPassword: string = '';
-  passwordDisplay: string = '';
   errorMessage: string = '';
   newUsername: string = '';
   currentPassword: string = '';
@@ -29,16 +27,6 @@ export class ProfileComponent implements OnInit {
     this.user = this.authService.getCurrentUser();
     if (!this.user) {
       this.router.navigate(['/login']);
-    }
-  }
-
-  showPassword(): void {
-    if (this.user && this.verifyPassword === this.user.password) {
-      this.passwordDisplay = this.user.password;
-      this.errorMessage = '';
-    } else {
-      this.errorMessage = 'Contraseña incorrecta.';
-      this.passwordDisplay = '';
     }
   }
 

@@ -10,7 +10,7 @@ export class AuthGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
     const isLoggedIn = this.authService.isLoggedIn();
-    
+
     // Si es la ruta de login
     if (route.data['requiresAuth'] === false) {
       if (isLoggedIn) {
