@@ -1,35 +1,122 @@
-.content {
-    background: rgba(0, 0, 0, 0.445);
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow:
-      0 0 10px rgba(0, 255, 153, 0.8),
-      0 0 20px rgba(0, 255, 153, 0.6),
-      0 0 40px rgba(0, 255, 153, 0.4);
-    width: 85%;
-    max-width: 700px;
-    margin: 120px auto 30px;
-    text-align: center;
-  }
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Rajdhani:wght@600&display=swap');
 
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #000;
+  color: #e5e5e5;
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 90%;
+  max-width: 1000px;
+  margin: 120px auto 30px;
+
+  padding: 20px;
+  border-radius: 15px;
+  background: rgba(0, 0, 0, 0.445);
+  box-shadow:
+    0 0 10px rgba(0, 255, 153, 0.8),
+    0 0 20px rgba(0, 255, 153, 0.6),
+    0 0 40px rgba(0, 255, 153, 0.4);
+  animation: fadeIn 1s ease-in-out;
+}
+
+.content h2 {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 48px;
+  font-weight: 600;
+  background: linear-gradient(90deg, #00ff99, #00d1ff, #ffffff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% auto;
+  animation: gradientMove 4s linear infinite;
+  text-shadow: 0 0 12px rgba(0, 255, 153, 0.5);
+  margin-bottom: 10px;
+}
+
+.content p {
+  font-size: 18px;
+  max-width: 750px;
+  margin: 0 auto 20px;
+  color: #cfcfcf;
+  text-shadow: 2px 2px 4px rgba(0, 255, 153, 0.5);
+  letter-spacing: 0.5px;
+  font-weight: 400;
+}
+
+section {
+  margin: 20px auto;
+  width: 85%;
+  text-align: center;
+  font-size: 18px;
+  color: #dcdcdc;
+}
+
+section h3 {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 30px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #00ff99;
+}
+
+section p {
+  font-size: 16px;
+  font-weight: 400;
+  margin: 0 auto;
+  max-width: 700px;
+  color: #bcbcbc;
+}
+
+img {
+  max-width: 90%;
+  height: auto;
+  margin: 20px auto;
+  display: block;
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(0, 255, 153, 0.3);
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* Responsivo */
+@media screen and (max-width: 768px) {
   .content h2 {
     font-size: 36px;
-    font-weight: 700;
-    color: #00ff99;
-    text-shadow: 3px 3px 8px rgba(0, 255, 153, 0.7);
-    background: rgba(0, 0, 0, 0.719);
-    padding: 15px 30px;
-    border-radius: 10px;
-    display: inline-block;
-    box-shadow: 0px 0px 15px rgba(0, 255, 153, 0.8);
   }
 
-  section {
-    margin: 40px auto;
-    padding: 20px;
-    width: 80%;
-    background: rgba(0, 0, 0, 0.719);
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 255, 153, 0.8);
-    text-align: center;
+  section h3 {
+    font-size: 24px;
   }
+
+  section p {
+    font-size: 15px;
+  }
+}

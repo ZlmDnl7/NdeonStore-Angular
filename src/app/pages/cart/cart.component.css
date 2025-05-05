@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Rajdhani:wght@600&display=swap');
 .container {
   margin-top: 120px;
   padding: 30px;
@@ -8,14 +9,22 @@
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
+  animation: fadeIn 1s ease-in-out;
 }
 
 h2 {
-  color: #00ff99;
-  font-size: 24px;
-  text-transform: uppercase;
-  font-weight: 700;
-  text-shadow: 0 0 10px #00ff99;
+  
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 56px;
+  font-weight: 600;
+  background: linear-gradient(90deg, #00ff99, #00d1ff, #ffffff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% auto;
+  animation: gradientMove 4s linear infinite;
+  text-shadow: 0 0 12px rgba(0, 255, 153, 0.5);
+  margin-bottom: 40px;
+  text-align: center; /* Asegura que el título esté centrado */
 }
 
 table {
@@ -56,7 +65,7 @@ button {
 }
 
 button:hover {
-  background-color: #6600CC;
+  background-color: #33c78e;
   color: white;
 }
 
@@ -72,5 +81,24 @@ button:hover {
 
   button {
     width: 100%;
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px); /* puedes subir a 20px para más efecto */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+}
+}
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
   }
 }
