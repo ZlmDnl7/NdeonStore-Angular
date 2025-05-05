@@ -5,7 +5,14 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
   width: 350px;
   text-align: center;
+
+  /* Centrado vertical y horizontal */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
+
 
 .container h2 {
   margin-bottom: 20px;
@@ -47,7 +54,7 @@ button {
 }
 
 button:hover {
-  background-color: #6600CC;
+  background-color: #33c78e;
   color: white;
 }
 
