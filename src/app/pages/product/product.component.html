@@ -1,3 +1,4 @@
+<!-- product.component.html -->
 <app-navbar></app-navbar>
 
 <div class="content">
@@ -7,7 +8,9 @@
 
   <div class="productos-container">
     <div class="producto" *ngFor="let product of products" (click)="openModal(product)">
-      <img [src]="product.imagen" [alt]="product.nombre">
+      <img [src]="product.imagen" 
+           [alt]="product.nombre"
+           onerror="this.onerror=null; this.src='https://via.placeholder.com/200x150?text=GPU'">
       <p>{{ product.nombre }}</p>
     </div>
   </div>
@@ -17,7 +20,10 @@
 <div id="modal" class="modal" *ngIf="showModal">
   <div class="modal-content">
     <span id="cerrarModal" class="close" (click)="closeModal()">×</span>
-    <img id="modalImagen" [src]="selectedProduct?.imagen" [alt]="selectedProduct?.nombre">
+    <img id="modalImagen" 
+         [src]="selectedProduct?.imagen" 
+         [alt]="selectedProduct?.nombre"
+         onerror="this.onerror=null; this.src='https://via.placeholder.com/300x200?text=GPU'">
     <div class="modal-info">
       <h2 id="modalNombre">{{ selectedProduct?.nombre }}</h2>
       <p id="modalDescripcion">{{ selectedProduct?.descripcion }}</p>

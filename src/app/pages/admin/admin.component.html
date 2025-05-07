@@ -1,3 +1,4 @@
+<!-- admin.component.html -->
 <div class="container">
   <h2>Panel de Administrador</h2>
   <button (click)="logout()">Cerrar Sesión</button>
@@ -16,7 +17,10 @@
     </thead>
     <tbody>
       <tr *ngFor="let product of products; let i = index">
-        <td><img [src]="product.imagen" width="50" alt="{{ product.nombre }}"></td>
+        <td><img [src]="product.imagen" 
+                 width="50" 
+                 [alt]="product.nombre"
+                 onerror="this.onerror=null; this.src='https://via.placeholder.com/50x50?text=GPU'"></td>
         <td>{{ product.nombre }}</td>
         <td>{{ product.descripcion }}</td>
         <td>{{ product.precio }}</td>
