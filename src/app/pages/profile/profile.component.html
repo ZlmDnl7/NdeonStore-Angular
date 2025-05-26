@@ -27,7 +27,7 @@
       <h2 id="modalNombre">{{ selectedProduct?.nombre }}</h2>
       <p id="modalDescripcion">{{ selectedProduct?.descripcion }}</p>
       <p><strong>Precio:</strong> <span id="modalPrecio">{{ selectedProduct?.precio }}</span></p>
-      <p><strong>Categoría:</strong> <span id="modalCategoria">{{ selectedProduct?.categoria }}</span></p>
+      <p><strong>Categoría:</strong> <span id="modalCategoria">{{ getCategoriaNombre(selectedProduct?.categoria_id) }}</span></p>
       <label for="modalCantidad">Cantidad:</label>
       <input type="number" id="modalCantidad" [(ngModel)]="quantity" min="1">
       <button id="agregarCarritoBtn" (click)="addToCart()">Agregar al Carrito</button>

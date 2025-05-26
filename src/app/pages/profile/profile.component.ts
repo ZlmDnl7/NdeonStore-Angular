@@ -8,6 +8,9 @@ import { RouterModule } from '@angular/router';
 import { NavbarComponent } from '../../shared/navbar/navbar.component';
 import { Product } from '../../core/models/product.model';
 import { ProductService } from '../../services/product.service';
+import { CartService } from '../../core/services/cart.service';
+import { Categoria } from '../../core/models/categoria.model';
+import { CategoriaService } from '../../services/categoria.service';
 
 @Component({
   selector: 'app-profile',
@@ -23,6 +26,7 @@ export class ProfileComponent implements OnInit {
   currentPassword: string = '';
   newPassword: string = '';
   products: Product[] = [];
+  categorias: Categoria[] = [];
   showModal: boolean = false;
   selectedProduct: Product | null = null;
   quantity: number = 1;
@@ -30,7 +34,9 @@ export class ProfileComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private productService: ProductService
+    private productService: ProductService,
+    private cartService: CartService,
+    private categoriaService: CategoriaService
   ) {}
 
   async ngOnInit() {
@@ -39,6 +45,7 @@ export class ProfileComponent implements OnInit {
       this.router.navigate(['/login']);
     }
     this.products = await this.productService.getProducts();
+    this.categorias = await this.categoriaService.getCategorias();
   }
 
   async updateProfile() {
@@ -59,6 +66,12 @@ export class ProfileComponent implements OnInit {
     }
   }
 
+  getCategoriaNombre(categoriaId: number | undefined): string {
+    if (!categoriaId) return 'Sin categoría';
+    const categoria = this.categorias.find(c => c.id === categoriaId);
+    return categoria?.nombre || 'Sin categoría';
+  }
+
   openModal(product: Product): void {
     this.selectedProduct = product;
     this.quantity = 1;
@@ -72,7 +85,8 @@ export class ProfileComponent implements OnInit {
 
   addToCart(): void {
     if (this.selectedProduct) {
-      // Implementar lógica para agregar al carrito
+      this.cartService.addToCart(this.selectedProduct, this.quantity);
+      alert('Producto agregado al carrito correctamente.');
       this.closeModal();
     }
   }

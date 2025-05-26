@@ -63,7 +63,13 @@ export class AuthService {
       role = 'admin';
     }
 
-    const user: User = { id: this.users.length + 1, username, password, fullname, role };
+    const user: User = { 
+      id: this.users.length + 1, 
+      usuario: username, 
+      contrasena: password,
+      fullname: fullname,
+      role: role 
+    };
     this.users.push(user);
     localStorage.setItem('users', JSON.stringify(this.users));
     return null;
