@@ -1,3 +1,4 @@
+<!-- product.component.html -->
 <app-navbar></app-navbar>
 
 <div class="content">
@@ -7,22 +8,27 @@
 
   <div class="productos-container">
     <div class="producto" *ngFor="let product of products" (click)="openModal(product)">
-      <img [src]="product.imagen" [alt]="product.nombre">
+      <img [src]="product.imagen" 
+           [alt]="product.nombre"
+           onerror="this.onerror=null; this.src='https://via.placeholder.com/200x150?text=GPU'">
       <p>{{ product.nombre }}</p>
     </div>
   </div>
 </div>
 
-<!-- Modal para detalles del producto -->
+<!-- Modal para detalles del producto. -->
 <div id="modal" class="modal" *ngIf="showModal">
   <div class="modal-content">
     <span id="cerrarModal" class="close" (click)="closeModal()">×</span>
-    <img id="modalImagen" [src]="selectedProduct?.imagen" [alt]="selectedProduct?.nombre">
+    <img id="modalImagen" 
+         [src]="selectedProduct?.imagen" 
+         [alt]="selectedProduct?.nombre"
+         onerror="this.onerror=null; this.src='https://via.placeholder.com/300x200?text=GPU'">
     <div class="modal-info">
       <h2 id="modalNombre">{{ selectedProduct?.nombre }}</h2>
       <p id="modalDescripcion">{{ selectedProduct?.descripcion }}</p>
       <p><strong>Precio:</strong> <span id="modalPrecio">{{ selectedProduct?.precio }}</span></p>
-      <p><strong>Categoría:</strong> <span id="modalCategoria">{{ selectedProduct?.categoria }}</span></p>
+      <p><strong>Categoría:</strong> <span id="modalCategoria">{{ getCategoriaNombre(selectedProduct?.categoria_id) }}</span></p>
       <label for="modalCantidad">Cantidad:</label>
       <input type="number" id="modalCantidad" [(ngModel)]="quantity" min="1">
       <button id="agregarCarritoBtn" (click)="addToCart()">Agregar al Carrito</button>

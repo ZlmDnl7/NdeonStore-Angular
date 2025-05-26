@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 import { Categoria } from '../core/models/categoria.model';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class CategoriaService {
   constructor(private supabaseService: SupabaseService) {}
 

@@ -1,3 +1,4 @@
+<!-- admin.component.html -->
 <div class="container">
   <h2>Panel de Administrador</h2>
   <button (click)="logout()">Cerrar Sesión</button>
@@ -15,15 +16,15 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let product of products">
-        <td><img [src]="product.imagen"
-                 width="50"
+      <tr *ngFor="let product of products; let i = index">
+        <td><img [src]="product.imagen" 
+                 width="50" 
                  [alt]="product.nombre"
                  onerror="this.onerror=null; this.src='https://via.placeholder.com/50x50?text=GPU'"></td>
         <td>{{ product.nombre }}</td>
         <td>{{ product.descripcion }}</td>
         <td>{{ product.precio }}</td>
-        <td>{{ categorias.find(c => c.id === product.categoria_id)?.nombre || 'Sin categoría' }}</td>
+        <td>{{ getCategoriaNombre(product.categoria_id) }}</td>
         <td><button class="delete-btn" (click)="deleteProduct(product.id)">Eliminar</button></td>
       </tr>
     </tbody>
@@ -70,4 +71,3 @@
     </tbody>
   </table>
 </div>
-

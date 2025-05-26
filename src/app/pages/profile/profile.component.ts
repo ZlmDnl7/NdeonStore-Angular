@@ -6,6 +6,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NavbarComponent } from '../../shared/navbar/navbar.component';
+import { Product } from '../../core/models/product.model';
+import { ProductService } from '../../services/product.service';
 
 @Component({
   selector: 'app-profile',
@@ -20,14 +22,23 @@ export class ProfileComponent implements OnInit {
   newUsuario: string = '';
   currentPassword: string = '';
   newPassword: string = '';
+  products: Product[] = [];
+  showModal: boolean = false;
+  selectedProduct: Product | null = null;
+  quantity: number = 1;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private productService: ProductService
+  ) {}
 
   async ngOnInit() {
     this.user = await this.authService.getCurrentUser();
     if (!this.user) {
       this.router.navigate(['/login']);
     }
+    this.products = await this.productService.getProducts();
   }
 
   async updateProfile() {
@@ -39,10 +50,31 @@ export class ProfileComponent implements OnInit {
     const updatedUser: User = { ...this.user };
     if (this.newUsuario) updatedUser.usuario = this.newUsuario;
     if (this.newPassword) updatedUser.contrasena = this.newPassword;
-    // Aquí deberías llamar a un método de AuthService para actualizar el usuario en Supabase
-    // await this.authService.updateUser(updatedUser);
-    alert('Perfil actualizado correctamente.');
-    this.router.navigate(['/profile']);
+    const success = await this.authService.updateUser(updatedUser);
+    if (success) {
+      alert('Perfil actualizado correctamente.');
+      this.router.navigate(['/profile']);
+    } else {
+      this.errorMessage = 'Error al actualizar el perfil.';
+    }
+  }
+
+  openModal(product: Product): void {
+    this.selectedProduct = product;
+    this.quantity = 1;
+    this.showModal = true;
+  }
+
+  closeModal(): void {
+    this.showModal = false;
+    this.selectedProduct = null;
+  }
+
+  addToCart(): void {
+    if (this.selectedProduct) {
+      // Implementar lógica para agregar al carrito
+      this.closeModal();
+    }
   }
 
   logout(): void {

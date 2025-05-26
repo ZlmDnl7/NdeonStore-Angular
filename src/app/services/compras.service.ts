@@ -14,7 +14,7 @@ export class ComprasService {
   async addCompra(compra: Compra): Promise<number | null> {
     const { data, error } = await this.supabaseService.createCompra(compra);
     if (error || !data || !data[0]) return null;
-    return data[0].id;
+    return (data[0] as Compra).id;
   }
 
   async updateCompra(id: number, compra: Compra): Promise<boolean> {

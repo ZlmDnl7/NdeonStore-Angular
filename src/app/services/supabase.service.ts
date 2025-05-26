@@ -119,19 +119,29 @@ export class SupabaseService {
 
   // Categoria CRUD
   async getCategorias() {
-    return await this.supabase.from('categoria').select('*');
+    return await this.supabase
+      .from('categorias')
+      .select('*');
   }
 
   async createCategoria(categoria: any) {
-    return await this.supabase.from('categoria').insert([categoria]);
+    return await this.supabase
+      .from('categorias')
+      .insert([categoria]);
   }
 
   async updateCategoria(id: number, categoria: any) {
-    return await this.supabase.from('categoria').update(categoria).eq('id', id);
+    return await this.supabase
+      .from('categorias')
+      .update(categoria)
+      .eq('id', id);
   }
 
   async deleteCategoria(id: number) {
-    return await this.supabase.from('categoria').delete().eq('id', id);
+    return await this.supabase
+      .from('categorias')
+      .delete()
+      .eq('id', id);
   }
 
   // Compras CRUD

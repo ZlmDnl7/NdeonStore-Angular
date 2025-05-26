@@ -44,6 +44,12 @@ export class AdminComponent implements OnInit {
     this.categorias = await this.categoriaService.getCategorias();
   }
 
+  getCategoriaNombre(categoriaId: number | undefined): string {
+    if (!categoriaId) return 'Sin categoría';
+    const categoria = this.categorias.find(c => c.id === categoriaId);
+    return categoria?.nombre || 'Sin categoría';
+  }
+
   async addProduct() {
     const ok = await this.productService.addProduct(this.newProduct);
     if (ok) {
