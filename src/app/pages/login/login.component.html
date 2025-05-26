@@ -1,8 +1,8 @@
 <div class="container">
   <h2>Iniciar Sesión</h2>
   <form (ngSubmit)="login()">
-    <input type="text" id="username" [(ngModel)]="username" name="username" placeholder="Usuario" required>
-    <input type="password" id="password" [(ngModel)]="password" name="password" placeholder="Contraseña" required>
+    <input type="text" id="usuario" [(ngModel)]="usuario" name="usuario" placeholder="Usuario" required>
+    <input type="password" id="contrasena" [(ngModel)]="contrasena" name="contrasena" placeholder="Contraseña" required>
     <button type="submit">Iniciar Sesión</button>
   </form>
   <p>¿No tienes cuenta? <a routerLink="/register">Regístrate</a></p>

@@ -19,21 +19,21 @@ export class CartService {
     return this.cart;
   }
 
-  addToCart(product: Product, quantity: number): void {
-    const item = this.cart.find(i => i.product.nombre === product.nombre);
+  addToCart(product: Product, cantidad: number): void {
+    const item = this.cart.find(i => i.product.id === product.id);
     if (item) {
-      item.quantity += quantity;
+      item.cantidad += cantidad;
     } else {
-      this.cart.push({ product, quantity });
+      this.cart.push({ product, cantidad });
     }
     this.saveCart();
   }
 
-  updateQuantity(index: number, quantity: number): void {
-    if (quantity <= 0) {
+  updateQuantity(index: number, cantidad: number): void {
+    if (cantidad <= 0) {
       this.cart.splice(index, 1);
     } else {
-      this.cart[index].quantity = quantity;
+      this.cart[index].cantidad = cantidad;
     }
     this.saveCart();
   }
@@ -49,7 +49,7 @@ export class CartService {
   }
 
   getTotal(): number {
-    return this.cart.reduce((total, item) => total + (item.product.precio * item.quantity), 0);
+    return this.cart.reduce((total, item) => total + (item.product.precio * item.cantidad), 0);
   }
 
   private saveCart(): void {

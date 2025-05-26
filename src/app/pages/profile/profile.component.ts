@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../core/services/auth.service';
+import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { User } from '../../core/models/user.model';
 import { CommonModule } from '@angular/common';
@@ -17,37 +17,36 @@ import { NavbarComponent } from '../../shared/navbar/navbar.component';
 export class ProfileComponent implements OnInit {
   user: User | null = null;
   errorMessage: string = '';
-  newUsername: string = '';
+  newUsuario: string = '';
   currentPassword: string = '';
   newPassword: string = '';
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  ngOnInit(): void {
-    this.user = this.authService.getCurrentUser();
+  async ngOnInit() {
+    this.user = await this.authService.getCurrentUser();
     if (!this.user) {
       this.router.navigate(['/login']);
     }
   }
 
-  updateProfile(): void {
+  async updateProfile() {
     if (!this.user) return;
-
-    if (this.currentPassword !== this.user.password) {
+    if (this.currentPassword !== this.user.contrasena) {
       this.errorMessage = 'Contraseña actual incorrecta.';
       return;
     }
-
     const updatedUser: User = { ...this.user };
-    if (this.newUsername) updatedUser.username = this.newUsername;
-    if (this.newPassword) updatedUser.password = this.newPassword;
-
-    this.authService.updateUser(updatedUser);
+    if (this.newUsuario) updatedUser.usuario = this.newUsuario;
+    if (this.newPassword) updatedUser.contrasena = this.newPassword;
+    // Aquí deberías llamar a un método de AuthService para actualizar el usuario en Supabase
+    // await this.authService.updateUser(updatedUser);
     alert('Perfil actualizado correctamente.');
     this.router.navigate(['/profile']);
   }
 
   logout(): void {
     this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }

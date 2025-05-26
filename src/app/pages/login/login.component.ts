@@ -2,9 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { AuthService } from '../../core/services/auth.service';
+import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
-
 
 @Component({
   selector: 'app-login',
@@ -14,20 +13,16 @@ import { Router } from '@angular/router';
   imports: [CommonModule, FormsModule, RouterModule]
 })
 export class LoginComponent {
-  username: string = '';
-  password: string = '';
+  usuario: string = '';
+  contrasena: string = '';
   errorMessage: string = '';
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  login(): void {
-    const user = this.authService.login(this.username, this.password);
+  async login() {
+    const user = await this.authService.login(this.usuario, this.contrasena);
     if (user) {
-      if (user.role === 'admin') {
-        this.router.navigate(['/admin']);
-      } else {
-        this.router.navigate(['/home']);
-      }
+      this.router.navigate(['/home']);
     } else {
       this.errorMessage = 'Usuario o contraseña incorrectos.';
     }

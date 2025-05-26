@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductService } from '../../core/services/product.service';
+import { ProductService } from '../../services/product.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -25,12 +25,8 @@ export class ProductComponent implements OnInit {
     private cartService: CartService
   ) {}
 
-  ngOnInit(): void {
-    this.loadProducts();
-  }
-
-  loadProducts(): void {
-    this.products = this.productService.getProducts();
+  async ngOnInit() {
+    this.products = await this.productService.getProducts();
   }
 
   openModal(product: Product): void {

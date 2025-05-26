@@ -11,26 +11,20 @@ export class AuthGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot): boolean {
     const isLoggedIn = this.authService.isLoggedIn();
 
-    // Si es la ruta de login
+    // Si es la ruta de login o registro
     if (route.data['requiresAuth'] === false) {
       if (isLoggedIn) {
         // Si ya está logueado, redirigir a home
         this.router.navigate(['/home']);
         return false;
       }
-      // Si no está logueado, permitir acceso al login
+      // Si no está logueado, permitir acceso al login/registro
       return true;
     }
 
-    // Para todas las demás rutas
+    // Para todas las demás rutas, solo requiere estar logueado
     if (!isLoggedIn) {
       this.router.navigate(['/login']);
-      return false;
-    }
-
-    // Verificar si la ruta requiere permisos de admin
-    if (route.data['requiresAdmin'] && !this.authService.isAdmin()) {
-      this.router.navigate(['/home']);
       return false;
     }
 

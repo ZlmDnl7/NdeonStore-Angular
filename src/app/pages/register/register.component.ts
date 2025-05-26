@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../../core/services/auth.service';
+import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -13,15 +13,14 @@ import { RouterModule } from '@angular/router';
   imports: [CommonModule, FormsModule, RouterModule]
 })
 export class RegisterComponent {
-  fullname: string = '';
-  username: string = '';
-  password: string = '';
+  usuario: string = '';
+  contrasena: string = '';
   errorMessage: string = '';
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  register(): void {
-    const error = this.authService.register(this.fullname, this.username, this.password);
+  async register() {
+    const error = await this.authService.register(this.usuario, this.contrasena);
     if (error) {
       this.errorMessage = error;
     } else {
