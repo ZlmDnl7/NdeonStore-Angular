@@ -1,29 +1,44 @@
 import { Injectable } from '@angular/core';
-import { SupabaseService } from './supabase.service';
+import { ApiService } from './api.service';
 import { Compra } from '../core/models/compras.model';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ComprasService {
-  constructor(private supabaseService: SupabaseService) {}
+  constructor(private api: ApiService) {}
 
   async getCompras(): Promise<Compra[]> {
-    const { data, error } = await this.supabaseService.getCompras();
-    return error ? [] : data;
+    try {
+      return await firstValueFrom(this.api.get<Compra[]>('/compras'));
+    } catch {
+      return [];
+    }
   }
 
   async addCompra(compra: Compra): Promise<number | null> {
-    const { data, error } = await this.supabaseService.createCompra(compra);
-    if (error || !data || !data[0]) return null;
-    return (data[0] as Compra).id;
+    try {
+      const res: any = await firstValueFrom(this.api.post('/compras', compra));
+      return res && res.id ? res.id : null;
+    } catch {
+      return null;
+    }
   }
 
   async updateCompra(id: number, compra: Compra): Promise<boolean> {
-    const { error } = await this.supabaseService.updateCompra(id, compra);
-    return !error;
+    try {
+      await firstValueFrom(this.api.put(`/compras/${id}`, compra));
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   async deleteCompra(id: number): Promise<boolean> {
-    const { error } = await this.supabaseService.deleteCompra(id);
-    return !error;
+    try {
+      await firstValueFrom(this.api.delete(`/compras/${id}`));
+      return true;
+    } catch {
+      return false;
+    }
   }
 } 

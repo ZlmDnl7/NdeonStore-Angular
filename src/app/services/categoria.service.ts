@@ -1,30 +1,44 @@
 import { Injectable } from '@angular/core';
-import { SupabaseService } from './supabase.service';
+import { ApiService } from './api.service';
 import { Categoria } from '../core/models/categoria.model';
+import { firstValueFrom } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class CategoriaService {
-  constructor(private supabaseService: SupabaseService) {}
+  constructor(private api: ApiService) {}
 
   async getCategorias(): Promise<Categoria[]> {
-    const { data, error } = await this.supabaseService.getCategorias();
-    return error ? [] : data;
+    try {
+      return await firstValueFrom(this.api.get<Categoria[]>('/categorias'));
+    } catch {
+      return [];
+    }
   }
 
   async addCategoria(categoria: Categoria): Promise<boolean> {
-    const { error } = await this.supabaseService.createCategoria(categoria);
-    return !error;
+    try {
+      await firstValueFrom(this.api.post('/categorias', categoria));
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   async updateCategoria(id: number, categoria: Categoria): Promise<boolean> {
-    const { error } = await this.supabaseService.updateCategoria(id, categoria);
-    return !error;
+    try {
+      await firstValueFrom(this.api.put(`/categorias/${id}`, categoria));
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   async deleteCategoria(id: number): Promise<boolean> {
-    const { error } = await this.supabaseService.deleteCategoria(id);
-    return !error;
+    try {
+      await firstValueFrom(this.api.delete(`/categorias/${id}`));
+      return true;
+    } catch {
+      return false;
+    }
   }
 } 

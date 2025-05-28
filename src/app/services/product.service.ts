@@ -1,52 +1,52 @@
 import { Injectable } from '@angular/core';
-import { SupabaseService } from './supabase.service';
+import { ApiService } from './api.service';
 import { Product } from '../core/models/product.model';
+import { firstValueFrom } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class ProductService {
-  constructor(private supabaseService: SupabaseService) {}
+  constructor(private api: ApiService) {}
 
   async getProducts(): Promise<Product[]> {
-    const { data, error } = await this.supabaseService.getProducts();
-    return error ? [] : data;
+    try {
+      return await firstValueFrom(this.api.get<Product[]>('/productos'));
+    } catch {
+      return [];
+    }
   }
 
   async getProductById(id: number): Promise<Product | null> {
-    const { data, error } = await this.supabaseService.getProducts();
-    if (error) return null;
-    return data.find((p: Product) => p.id === id) || null;
+    try {
+      return await firstValueFrom(this.api.get<Product>(`/productos/${id}`));
+    } catch {
+      return null;
+    }
   }
 
-  async addProduct(product: Product, imageFile?: File): Promise<boolean> {
-    let imagen = product.imagen;
-    if (imageFile) {
-      const fileName = `${Date.now()}-${imageFile.name}`;
-      const { error: imageError } = await this.supabaseService.uploadProductImage(imageFile, fileName);
-      if (imageError) return false;
-      const { data: { publicUrl } } = await this.supabaseService.getProductImageUrl(fileName);
-      imagen = publicUrl;
+  async addProduct(product: Product): Promise<boolean> {
+    try {
+      await firstValueFrom(this.api.post('/productos', product));
+      return true;
+    } catch {
+      return false;
     }
-    const { error } = await this.supabaseService.createProduct({ ...product, imagen });
-    return !error;
   }
 
-  async updateProduct(id: number, product: Product, imageFile?: File): Promise<boolean> {
-    let imagen = product.imagen;
-    if (imageFile) {
-      const fileName = `${Date.now()}-${imageFile.name}`;
-      const { error: imageError } = await this.supabaseService.uploadProductImage(imageFile, fileName);
-      if (imageError) return false;
-      const { data: { publicUrl } } = await this.supabaseService.getProductImageUrl(fileName);
-      imagen = publicUrl;
+  async updateProduct(id: number, product: Product): Promise<boolean> {
+    try {
+      await firstValueFrom(this.api.put(`/productos/${id}`, product));
+      return true;
+    } catch {
+      return false;
     }
-    const { error } = await this.supabaseService.updateProduct(id, { ...product, imagen });
-    return !error;
   }
 
   async deleteProduct(id: number): Promise<boolean> {
-    const { error } = await this.supabaseService.deleteProduct(id);
-    return !error;
+    try {
+      await firstValueFrom(this.api.delete(`/productos/${id}`));
+      return true;
+    } catch {
+      return false;
+    }
   }
 } 

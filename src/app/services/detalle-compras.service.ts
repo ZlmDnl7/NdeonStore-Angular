@@ -1,28 +1,44 @@
 import { Injectable } from '@angular/core';
-import { SupabaseService } from './supabase.service';
+import { ApiService } from './api.service';
 import { DetalleCompra } from '../core/models/detalle_compras.model';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class DetalleComprasService {
-  constructor(private supabaseService: SupabaseService) {}
+  constructor(private api: ApiService) {}
 
   async getDetalleCompras(): Promise<DetalleCompra[]> {
-    const { data, error } = await this.supabaseService.getDetalleCompras();
-    return error ? [] : data;
+    try {
+      return await firstValueFrom(this.api.get<DetalleCompra[]>('/detalle-compras'));
+    } catch {
+      return [];
+    }
   }
 
   async addDetalleCompra(detalle: DetalleCompra): Promise<boolean> {
-    const { error } = await this.supabaseService.createDetalleCompra(detalle);
-    return !error;
+    try {
+      await firstValueFrom(this.api.post('/detalle-compras', detalle));
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   async updateDetalleCompra(id: number, detalle: DetalleCompra): Promise<boolean> {
-    const { error } = await this.supabaseService.updateDetalleCompra(id, detalle);
-    return !error;
+    try {
+      await firstValueFrom(this.api.put(`/detalle-compras/${id}`, detalle));
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   async deleteDetalleCompra(id: number): Promise<boolean> {
-    const { error } = await this.supabaseService.deleteDetalleCompra(id);
-    return !error;
+    try {
+      await firstValueFrom(this.api.delete(`/detalle-compras/${id}`));
+      return true;
+    } catch {
+      return false;
+    }
   }
 } 
