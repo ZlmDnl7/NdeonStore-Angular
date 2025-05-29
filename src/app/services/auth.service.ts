@@ -2,17 +2,22 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from './api.service';
 import { User } from '../core/models/user.model';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, BehaviorSubject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private currentUser: User | null = null;
+  private loggedIn$ = new BehaviorSubject<boolean>(this.isLoggedIn());
 
   constructor(private api: ApiService, private router: Router) {
     const savedUser = sessionStorage.getItem('currentUser');
     if (savedUser) {
       this.currentUser = JSON.parse(savedUser);
     }
+  }
+
+  getLoggedInObservable() {
+    return this.loggedIn$.asObservable();
   }
 
   async login(usuario: string, contrasena: string): Promise<User | null> {
@@ -22,6 +27,7 @@ export class AuthService {
         sessionStorage.setItem('access_token', res.access_token);
         sessionStorage.setItem('currentUser', JSON.stringify(res.user));
         this.currentUser = res.user;
+        this.loggedIn$.next(true);
         if (res.user.role === 'admin') {
           this.router.navigate(['/admin']);
         } else {
@@ -51,6 +57,7 @@ export class AuthService {
     this.currentUser = null;
     sessionStorage.removeItem('access_token');
     sessionStorage.removeItem('currentUser');
+    this.loggedIn$.next(false);
     this.router.navigate(['/login']);
   }
 

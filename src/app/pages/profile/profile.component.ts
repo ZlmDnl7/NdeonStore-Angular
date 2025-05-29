@@ -11,6 +11,7 @@ import { ProductService } from '../../services/product.service';
 import { CartService } from '../../core/services/cart.service';
 import { Categoria } from '../../core/models/categoria.model';
 import { CategoriaService } from '../../services/categoria.service';
+import { BehaviorSubject, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -30,6 +31,7 @@ export class ProfileComponent implements OnInit {
   showModal: boolean = false;
   selectedProduct: Product | null = null;
   quantity: number = 1;
+  private sessionSub: Subscription | undefined;
 
   constructor(
     private authService: AuthService,
@@ -43,9 +45,21 @@ export class ProfileComponent implements OnInit {
     this.user = await this.authService.getCurrentUser();
     if (!this.user) {
       this.router.navigate(['/login']);
+      return;
     }
     this.products = await this.productService.getProducts();
     this.categorias = await this.categoriaService.getCategorias();
+
+    // Suscribirse a los cambios de sesión
+    this.sessionSub = this.authService.getLoggedInObservable().subscribe(isLoggedIn => {
+      if (!isLoggedIn) {
+        this.router.navigate(['/login']);
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.sessionSub?.unsubscribe();
   }
 
   async updateProfile() {
@@ -93,6 +107,7 @@ export class ProfileComponent implements OnInit {
 
   logout(): void {
     this.authService.logout();
+    this.router.navigate(['/login']);
   }
 
   isAdmin(): boolean {

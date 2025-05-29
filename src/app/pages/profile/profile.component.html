@@ -1,22 +1,28 @@
-<app-navbar></app-navbar>
+<ng-container *ngIf="user; else redirectToLogin">
+  <app-navbar></app-navbar>
+  <div class="container">
+    <h2>Mi Perfil</h2>
+    <div>
+      <p><strong>Usuario:</strong> {{ user.usuario }}</p>
+      <p><strong>Rol:</strong> {{ user.role }}</p>
+      <form (ngSubmit)="updateProfile()">
+        <input type="text" [(ngModel)]="newUsuario" name="newUsuario" placeholder="Nuevo usuario">
+        <input type="password" [(ngModel)]="currentPassword" name="currentPassword" placeholder="Contraseña actual">
+        <input type="password" [(ngModel)]="newPassword" name="newPassword" placeholder="Nueva contraseña">
+        <button type="submit">Actualizar Perfil</button>
+      </form>
+      <button (click)="logout()" style="margin-top: 20px; width: 80%; background: #ff4d4d; color: white;">Cerrar Sesión</button>
+      <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
 
-<div class="container">
-  <h2>Mi Perfil</h2>
-  <div *ngIf="user">
-    <p><strong>Usuario:</strong> {{ user.usuario }}</p>
-    <p><strong>Rol:</strong> {{ user.role }}</p>
-    <form (ngSubmit)="updateProfile()">
-      <input type="text" [(ngModel)]="newUsuario" name="newUsuario" placeholder="Nuevo usuario">
-      <input type="password" [(ngModel)]="currentPassword" name="currentPassword" placeholder="Contraseña actual">
-      <input type="password" [(ngModel)]="newPassword" name="newPassword" placeholder="Nueva contraseña">
-      <button type="submit">Actualizar Perfil</button>
-    </form>
-    <button (click)="logout()" style="margin-top: 20px; width: 80%; background: #ff4d4d; color: white;">Cerrar Sesión</button>
-    <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
-
-    <div *ngIf="isAdmin()" class="admin-section">
-      <h3>Panel de Administrador</h3>
-      <p>Aquí puedes agregar funcionalidades exclusivas para el administrador.</p>
+      <div *ngIf="isAdmin()" class="admin-section">
+        <h3>Panel de Administrador</h3>
+        <p>Aquí puedes agregar funcionalidades exclusivas para el administrador.</p>
+      </div>
     </div>
   </div>
-</div>
+</ng-container>
+<ng-template #redirectToLogin>
+  <script>
+    window.location.href = '/login';
+  </script>
+</ng-template>
