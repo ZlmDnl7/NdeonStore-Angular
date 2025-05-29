@@ -16,7 +16,7 @@ export class UsuariosService {
   }
 
   async findAll(): Promise<any[]> {
-    const { data, error } = await this.supabase.from('usuarios').select('*');
+    const { data, error } = await this.supabase.from('usuarios').select('id, usuario');
     if (error) throw new Error(error.message);
     return data;
   }

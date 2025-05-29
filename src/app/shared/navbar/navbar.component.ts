@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { AuthService } from '../../core/services/auth.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -19,5 +19,9 @@ export class NavbarComponent {
 
   logout(): void {
     this.authService.logout();
+  }
+
+  isAdmin(): boolean {
+    return this.authService.isAdmin();
   }
 }

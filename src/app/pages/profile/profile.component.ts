@@ -93,6 +93,9 @@ export class ProfileComponent implements OnInit {
 
   logout(): void {
     this.authService.logout();
-    this.router.navigate(['/login']);
+  }
+
+  isAdmin(): boolean {
+    return this.user?.role === 'admin';
   }
 }

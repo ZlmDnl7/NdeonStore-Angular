@@ -1,11 +1,15 @@
-import { Controller, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { ComprasService } from './compras.service';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
-@UseGuards(JwtAuthGuard)
 @Controller('compras')
 export class ComprasController {
   constructor(private readonly comprasService: ComprasService) {}
+
+  @Post()
+  async crearCompra(@Body() body: any) {
+    const { usuario_id, total, detalles } = body;
+    return await this.comprasService.crearCompra(usuario_id, total, detalles);
+  }
 
   // Aquí irían los métodos CRUD protegidos
 }

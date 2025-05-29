@@ -56,27 +56,25 @@ export class CartComponent implements OnInit {
       return;
     }
     const compra = {
-      id: 0,
-      fecha: new Date().toISOString(),
       total: this.total,
-      usuario_id: user.id
+      usuario_id: user.id,
+      detalles: this.cartItems.map(item => ({
+        producto_id: item.product.id,
+        cantidad: item.cantidad,
+        precio_unitario: item.product.precio
+      }))
     };
     const compraId = await this.comprasService.addCompra(compra);
     if (!compraId) {
       alert('Error al registrar la compra.');
       return;
     }
-    for (const item of this.cartItems) {
-      await this.detalleComprasService.addDetalleCompra({
-        id: 0,
-        compra_id: compraId,
-        producto_id: item.product.id,
-        cantidad: item.cantidad,
-        precio_unitario: item.product.precio
-      });
-    }
     alert('Compra realizada con éxito. ¡Gracias!');
     this.cartService.clearCart();
-    this.router.navigate(['/product']);
+    if (user.role === 'admin') {
+      this.router.navigate(['/admin']);
+    } else {
+      this.router.navigate(['/home']);
+    }
   }
 }

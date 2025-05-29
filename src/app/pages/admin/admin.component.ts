@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { Product } from '../../core/models/product.model';
 import { User } from '../../core/models/user.model';
 import { Categoria } from '../../core/models/categoria.model';
+import { supabase } from '../../supabaseClient';
 
 @Component({
   selector: 'app-admin',
@@ -30,6 +31,7 @@ export class AdminComponent implements OnInit {
     categoria_id: 0
   };
   newCategoria: string = '';
+  selectedFile: File | null = null;
 
   constructor(
     private authService: AuthService,
@@ -50,12 +52,41 @@ export class AdminComponent implements OnInit {
     return categoria?.nombre || 'Sin categoría';
   }
 
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+    }
+  }
+
+  async uploadImageToSupabase(file: File): Promise<string | null> {
+    const cleanName = file.name.replace(/[^a-zA-Z0-9.]/g, '_');
+    const filePath = `${Date.now()}_${cleanName}`;
+    const { data, error } = await supabase.storage.from('product-images').upload(filePath, file);
+    if (error) {
+      console.error('Error al subir imagen a Supabase:', error.message, error);
+      return null;
+    }
+    const { data: publicUrl } = supabase.storage.from('product-images').getPublicUrl(filePath);
+    return publicUrl.publicUrl;
+  }
+
   async addProduct() {
+    if (this.selectedFile) {
+      const imageUrl = await this.uploadImageToSupabase(this.selectedFile);
+      if (imageUrl) {
+        this.newProduct.imagen = imageUrl;
+      } else {
+        alert('Error al subir la imagen.');
+        return;
+      }
+    }
     const ok = await this.productService.addProduct(this.newProduct);
     if (ok) {
       alert('Producto agregado correctamente.');
       this.products = await this.productService.getProducts();
       this.newProduct = { id: 0, nombre: '', descripcion: '', precio: 0, imagen: '', categoria_id: 0 };
+      this.selectedFile = null;
     } else {
       alert('Error al agregar producto.');
     }

@@ -20,23 +20,25 @@ export class AuthService {
     this.supabase = createClient(url, key);
   }
 
-  async register(usuario: string, contrasena: string, role: string = 'user') {
+  async register(usuario: string, contrasena: string, role?: string) {
     // Verificar si el usuario ya existe
-    const { data: existing, error: findError } = await this.supabase.from('usuarios').select('*').eq('usuario', usuario).single();
+    const { data: existing } = await this.supabase.from('usuarios').select('*').eq('usuario', usuario).single();
     if (existing) {
       throw new ConflictException('El usuario ya existe');
     }
     // Encriptar contraseña
     const hashedPassword = await bcrypt.hash(contrasena, 10);
     // Crear usuario
-    const { data, error } = await this.supabase.from('usuarios').insert([{ usuario, contrasena: hashedPassword, role }]).select().single();
+    const insertData: any = { usuario, contrasena: hashedPassword };
+    if (role) insertData.role = role;
+    const { data, error } = await this.supabase.from('usuarios').insert([insertData]).select().single();
     if (error) throw new Error(error.message);
     return { id: data.id, usuario: data.usuario, role: data.role };
   }
 
   async login(usuario: string, contrasena: string) {
     // Buscar usuario
-    const { data: user, error } = await this.supabase.from('usuarios').select('*').eq('usuario', usuario).single();
+    const { data: user } = await this.supabase.from('usuarios').select('*').eq('usuario', usuario).single();
     if (!user) {
       throw new UnauthorizedException('Usuario o contraseña incorrectos');
     }

@@ -1,36 +1,22 @@
 <app-navbar></app-navbar>
 
-<div class="content">
-  <h2>Nuestros Productos</h2>
-  <p>En NDEON STORE encontrarás una cuidada selección de tarjetas gráficas de las marcas más reconocidas como NVIDIA y AMD. Nos enfocamos en ofrecer productos de alto rendimiento para gamers, diseñadores y creadores de contenido que buscan lo mejor en tecnología gráfica.</p>
-  <p>Cada producto ha sido evaluado por nuestro equipo para garantizarte calidad, potencia y compatibilidad. Explora nuestro catálogo y haz clic en cualquier tarjeta para ver más detalles.</p>
+<div class="container">
+  <h2>Mi Perfil</h2>
+  <div *ngIf="user">
+    <p><strong>Usuario:</strong> {{ user.usuario }}</p>
+    <p><strong>Rol:</strong> {{ user.role }}</p>
+    <form (ngSubmit)="updateProfile()">
+      <input type="text" [(ngModel)]="newUsuario" name="newUsuario" placeholder="Nuevo usuario">
+      <input type="password" [(ngModel)]="currentPassword" name="currentPassword" placeholder="Contraseña actual">
+      <input type="password" [(ngModel)]="newPassword" name="newPassword" placeholder="Nueva contraseña">
+      <button type="submit">Actualizar Perfil</button>
+    </form>
+    <button (click)="logout()" style="margin-top: 20px; width: 80%; background: #ff4d4d; color: white;">Cerrar Sesión</button>
+    <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
 
-  <div class="productos-container">
-    <div class="producto" *ngFor="let product of products" (click)="openModal(product)">
-      <img [src]="product.imagen"
-           [alt]="product.nombre"
-           onerror="this.onerror=null; this.src='https://via.placeholder.com/200x150?text=GPU'">
-      <p>{{ product.nombre }}</p>
-    </div>
-  </div>
-</div>
-
-<!-- Modal para detalles del producto -->
-<div id="modal" class="modal" *ngIf="showModal">
-  <div class="modal-content">
-    <span id="cerrarModal" class="close" (click)="closeModal()">×</span>
-    <img id="modalImagen"
-         [src]="selectedProduct?.imagen"
-         [alt]="selectedProduct?.nombre"
-         onerror="this.onerror=null; this.src='https://via.placeholder.com/300x200?text=GPU'">
-    <div class="modal-info">
-      <h2 id="modalNombre">{{ selectedProduct?.nombre }}</h2>
-      <p id="modalDescripcion">{{ selectedProduct?.descripcion }}</p>
-      <p><strong>Precio:</strong> <span id="modalPrecio">{{ selectedProduct?.precio }}</span></p>
-      <p><strong>Categoría:</strong> <span id="modalCategoria">{{ getCategoriaNombre(selectedProduct?.categoria_id) }}</span></p>
-      <label for="modalCantidad">Cantidad:</label>
-      <input type="number" id="modalCantidad" [(ngModel)]="quantity" min="1">
-      <button id="agregarCarritoBtn" (click)="addToCart()">Agregar al Carrito</button>
+    <div *ngIf="isAdmin()" class="admin-section">
+      <h3>Panel de Administrador</h3>
+      <p>Aquí puedes agregar funcionalidades exclusivas para el administrador.</p>
     </div>
   </div>
 </div>

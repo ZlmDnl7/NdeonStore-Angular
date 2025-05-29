@@ -38,20 +38,9 @@
     <select id="productCategory" [(ngModel)]="newProduct.categoria_id" name="categoria_id" required>
       <option *ngFor="let cat of categorias" [value]="cat.id">{{ cat.nombre }}</option>
     </select>
-    <input type="text" id="productImage" [(ngModel)]="newProduct.imagen" name="imagen" placeholder="URL de la Imagen" required>
+    <input type="file" id="productImage" (change)="onFileSelected($event)" name="imagen" required>
     <button type="submit">Añadir Producto</button>
   </form>
-
-  <h3>Gestión de Categorías</h3>
-  <form (ngSubmit)="addCategoria()">
-    <input type="text" [(ngModel)]="newCategoria" name="nuevaCategoria" placeholder="Nueva Categoría" required>
-    <button type="submit">Agregar Categoría</button>
-  </form>
-  <ul>
-    <li *ngFor="let cat of categorias">
-      {{ cat.nombre }} <button (click)="deleteCategoria(cat.id)">Eliminar</button>
-    </li>
-  </ul>
 
   <h3>Lista de Usuarios</h3>
   <table id="userTable">

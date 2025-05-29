@@ -22,6 +22,11 @@ export class AuthService {
         sessionStorage.setItem('access_token', res.access_token);
         sessionStorage.setItem('currentUser', JSON.stringify(res.user));
         this.currentUser = res.user;
+        if (res.user.role === 'admin') {
+          this.router.navigate(['/admin']);
+        } else {
+          this.router.navigate(['/home']);
+        }
         return res.user;
       }
       return null;
@@ -90,5 +95,10 @@ export class AuthService {
     } catch {
       return false;
     }
+  }
+
+  isAdmin(): boolean {
+    const user = this.currentUser || JSON.parse(sessionStorage.getItem('currentUser') || 'null');
+    return user && user.role === 'admin';
   }
 } 

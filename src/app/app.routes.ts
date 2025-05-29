@@ -1,10 +1,11 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
+import { AdminGuard } from './core/guards/admin.guard';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'home',  // Cambiado de 'login' a 'home'
+    redirectTo: 'login',  // Cambiado de 'home' a 'login'
     pathMatch: 'full'
   },
   {
@@ -40,7 +41,7 @@ export const routes: Routes = [
   {
     path: 'admin',
     loadChildren: () => import('./pages/admin/admin.module').then(m => m.AdminModule),
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, AdminGuard],
     data: { requiresAdmin: true }
   },
   {
@@ -48,5 +49,5 @@ export const routes: Routes = [
     loadChildren: () => import('./pages/find-us/find-us.module').then(m => m.FindUsModule),
     canActivate: [AuthGuard]
   },
-  { path: '**', redirectTo: 'home' }  // Cambiado de 'login' a 'home'
+  { path: '**', redirectTo: 'login' }  // Cambiado de 'home' a 'login'
 ];
