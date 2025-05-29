@@ -15,11 +15,13 @@ export class DetalleComprasService {
     }
   }
 
-  async addDetalleCompra(detalle: DetalleCompra): Promise<boolean> {
+  async addDetalleCompra(detalle: DetalleCompra, compraId: number, userId: number): Promise<boolean> {
     try {
-      await firstValueFrom(this.api.post('/detalle-compras', detalle));
+      const detailWithIds = { ...detalle, compra_id: compraId, usuario_id: userId };
+      await firstValueFrom(this.api.post('/detalle-compras', detailWithIds));
       return true;
-    } catch {
+    } catch (error) {
+      console.error('Error adding detalle compra:', error);
       return false;
     }
   }

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { ConfigService } from '@nestjs/config';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsuariosService {
@@ -34,6 +35,11 @@ export class UsuariosService {
   }
 
   async update(id: number, usuario: any): Promise<any> {
+    // If a new password is provided, hash it
+    if (usuario.contrasena) {
+      const hashedPassword = await bcrypt.hash(usuario.contrasena, 10);
+      usuario.contrasena = hashedPassword;
+    }
     const { data, error } = await this.supabase.from('usuarios').update(usuario).eq('id', id).select().single();
     if (error) throw new Error(error.message);
     return data;

@@ -12,6 +12,7 @@ import { CartService } from '../../core/services/cart.service';
 import { Categoria } from '../../core/models/categoria.model';
 import { CategoriaService } from '../../services/categoria.service';
 import { BehaviorSubject, Subscription } from 'rxjs';
+import { ModalService } from '../../services/modal.service';
 
 @Component({
   selector: 'app-profile',
@@ -38,7 +39,8 @@ export class ProfileComponent implements OnInit {
     private router: Router,
     private productService: ProductService,
     private cartService: CartService,
-    private categoriaService: CategoriaService
+    private categoriaService: CategoriaService,
+    private modalService: ModalService
   ) {}
 
   async ngOnInit() {
@@ -64,19 +66,22 @@ export class ProfileComponent implements OnInit {
 
   async updateProfile() {
     if (!this.user) return;
-    if (this.currentPassword !== this.user.contrasena) {
-      this.errorMessage = 'Contraseña actual incorrecta.';
-      return;
-    }
-    const updatedUser: User = { ...this.user };
-    if (this.newUsuario) updatedUser.usuario = this.newUsuario;
-    if (this.newPassword) updatedUser.contrasena = this.newPassword;
-    const success = await this.authService.updateUser(updatedUser);
-    if (success) {
-      alert('Perfil actualizado correctamente.');
-      this.router.navigate(['/profile']);
-    } else {
+    
+    try {
+      const updatedUser: User = { ...this.user };
+      if (this.newUsuario) updatedUser.usuario = this.newUsuario;
+      if (this.newPassword) updatedUser.contrasena = this.newPassword;
+      
+      const success = await this.authService.updateUser(updatedUser);
+      if (success) {
+        this.modalService.open('Perfil actualizado correctamente.');
+      } else {
+        this.errorMessage = 'Error al actualizar el perfil.';
+        this.modalService.open('Error al actualizar el perfil.');
+      }
+    } catch (error) {
       this.errorMessage = 'Error al actualizar el perfil.';
+      this.modalService.open('Error al actualizar el perfil.');
     }
   }
 
@@ -107,7 +112,9 @@ export class ProfileComponent implements OnInit {
 
   logout(): void {
     this.authService.logout();
-    this.router.navigate(['/login']);
+    setTimeout(() => {
+      this.router.navigate(['/login']);
+    }, 50);
   }
 
   isAdmin(): boolean {

@@ -13,30 +13,33 @@ export class AuthGuard implements CanActivate {
     const user = JSON.parse(sessionStorage.getItem('currentUser') || 'null');
     const path = route.routeConfig?.path;
 
-    // Permitir acceso a login y register solo si NO está logueado
-    if (path === 'login' || path === 'register') {
-      if (isLoggedIn) {
-        if (user && user.role === 'admin') {
+    // Allow access to login and register if NOT logged in
+    if ((path === 'login' || path === 'register') && !isLoggedIn) {
+      return true;
+    }
+
+    // If logged in and trying to access login or register, redirect
+    if ((path === 'login' || path === 'register') && isLoggedIn) {
+       if (user && user.role === 'admin') {
           this.router.navigate(['/admin']);
         } else {
           this.router.navigate(['/home']);
         }
         return false;
-      }
-      return true;
     }
 
-    // Si es admin y la ruta no es admin, redirigir a /admin
-    if (user && user.role === 'admin' && path !== 'admin') {
-      this.router.navigate(['/admin']);
-      return false;
-    }
-
-    // Proteger rutas normales
+    // If not logged in and trying to access other routes, redirect to login
     if (!isLoggedIn) {
       this.router.navigate(['/login']);
       return false;
     }
+
+    // If logged in and trying to access other routes, allow access (with admin check)
+    if (user && user.role === 'admin' && path !== 'admin' && path !== 'login' && path !== 'register') {
+        this.router.navigate(['/admin']);
+        return false;
+    }
+
     return true;
   }
 }

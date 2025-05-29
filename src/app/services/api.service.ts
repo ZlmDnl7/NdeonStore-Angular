@@ -13,6 +13,9 @@ export class ApiService {
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     if (token) {
       headers = headers.set('Authorization', `Bearer ${token}`);
+      console.log('Authorization token found:', token);
+    } else {
+      console.log('Authorization token not found');
     }
     return headers;
   }

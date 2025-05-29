@@ -10,6 +10,7 @@ import { Product } from '../../core/models/product.model';
 import { User } from '../../core/models/user.model';
 import { Categoria } from '../../core/models/categoria.model';
 import { supabase } from '../../supabaseClient';
+import { ModalService } from '../../services/modal.service';
 
 @Component({
   selector: 'app-admin',
@@ -37,13 +38,22 @@ export class AdminComponent implements OnInit {
     private authService: AuthService,
     private productService: ProductService,
     private categoriaService: CategoriaService,
-    private router: Router
+    private router: Router,
+    private modalService: ModalService
   ) {}
 
   async ngOnInit() {
-    this.products = await this.productService.getProducts();
-    this.users = await this.authService.getUsers();
-    this.categorias = await this.categoriaService.getCategorias();
+    try {
+      this.products = await this.productService.getProducts();
+      this.users = await this.authService.getUsers();
+      this.categorias = await this.categoriaService.getCategorias();
+      
+      if (!this.users || this.users.length === 0) {
+        console.log('No users found or error loading users');
+      }
+    } catch (error) {
+      console.error('Error loading data:', error);
+    }
   }
 
   getCategoriaNombre(categoriaId: number | undefined): string {
@@ -65,6 +75,7 @@ export class AdminComponent implements OnInit {
     const { data, error } = await supabase.storage.from('product-images').upload(filePath, file);
     if (error) {
       console.error('Error al subir imagen a Supabase:', error.message, error);
+      this.modalService.open('Error al subir imagen a Supabase.');
       return null;
     }
     const { data: publicUrl } = supabase.storage.from('product-images').getPublicUrl(filePath);
@@ -77,32 +88,37 @@ export class AdminComponent implements OnInit {
       if (imageUrl) {
         this.newProduct.imagen = imageUrl;
       } else {
-        alert('Error al subir la imagen.');
         return;
       }
     }
     const ok = await this.productService.addProduct(this.newProduct);
     if (ok) {
-      alert('Producto agregado correctamente.');
+      this.modalService.open('Producto agregado correctamente.');
       this.products = await this.productService.getProducts();
       this.newProduct = { id: 0, nombre: '', descripcion: '', precio: 0, imagen: '', categoria_id: 0 };
       this.selectedFile = null;
     } else {
-      alert('Error al agregar producto.');
+      this.modalService.open('Error al agregar producto.');
     }
   }
 
   async deleteProduct(id: number) {
     const ok = await this.productService.deleteProduct(id);
     if (ok) {
+      this.modalService.open('Producto eliminado correctamente.');
       this.products = await this.productService.getProducts();
+    } else {
+      this.modalService.open('Error al eliminar producto.');
     }
   }
 
   async deleteUser(id: number) {
     const ok = await this.authService.deleteUser(id);
     if (ok) {
+      this.modalService.open('Usuario eliminado correctamente.');
       this.users = await this.authService.getUsers();
+    } else {
+      this.modalService.open('Error al eliminar usuario.');
     }
   }
 
@@ -110,8 +126,11 @@ export class AdminComponent implements OnInit {
     if (this.newCategoria.trim()) {
       const ok = await this.categoriaService.addCategoria({ id: 0, nombre: this.newCategoria });
       if (ok) {
+        this.modalService.open('Categoría agregada correctamente.');
         this.categorias = await this.categoriaService.getCategorias();
         this.newCategoria = '';
+      } else {
+        this.modalService.open('Error al agregar categoría.');
       }
     }
   }
@@ -119,12 +138,17 @@ export class AdminComponent implements OnInit {
   async deleteCategoria(id: number) {
     const ok = await this.categoriaService.deleteCategoria(id);
     if (ok) {
+      this.modalService.open('Categoría eliminada correctamente.');
       this.categorias = await this.categoriaService.getCategorias();
+    } else {
+      this.modalService.open('Error al eliminar categoría.');
     }
   }
 
   logout(): void {
     this.authService.logout();
-    this.router.navigate(['/login']);
+    setTimeout(() => {
+      this.router.navigate(['/login']);
+    }, 50);
   }
 }

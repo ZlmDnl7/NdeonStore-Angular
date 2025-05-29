@@ -58,7 +58,6 @@ export class AuthService {
     sessionStorage.removeItem('access_token');
     sessionStorage.removeItem('currentUser');
     this.loggedIn$.next(false);
-    this.router.navigate(['/login']);
   }
 
   async getCurrentUser(): Promise<User | null> {
@@ -78,8 +77,10 @@ export class AuthService {
   async getUsers(): Promise<User[]> {
     try {
       const users = await firstValueFrom(this.api.get<User[]>('/usuarios'));
+      console.log('Users loaded:', users);
       return users;
-    } catch {
+    } catch (error) {
+      console.error('Error loading users:', error);
       return [];
     }
   }
@@ -87,8 +88,10 @@ export class AuthService {
   async deleteUser(id: number): Promise<boolean> {
     try {
       await firstValueFrom(this.api.delete(`/usuarios/${id}`));
+      console.log('User deleted successfully:', id);
       return true;
-    } catch {
+    } catch (error) {
+      console.error('Error deleting user:', error);
       return false;
     }
   }
